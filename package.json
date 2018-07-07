@@ -1,0 +1,30 @@
+{
+  "name": "ceiling-mongodb",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine index.spec.js",
+    "deploy": "deploy-node-module"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dword-design/ceiling-mongodb.git"
+  },
+  "author": "Sebastian Landwehr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dword-design/ceiling-mongodb/issues"
+  },
+  "homepage": "https://github.com/dword-design/ceiling-mongodb#readme",
+  "devDependencies": {
+    "console-mock2": "^0.2.1",
+    "deploy-node-module": "^1.0.4",
+    "jasmine": "^3.1.0",
+    "mongo-in-memory": "0.0.5"
+  },
+  "dependencies": {
+    "mongodb": "^3.1.1",
+    "not-null": "^1.0.1"
+  }
+}
