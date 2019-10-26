@@ -1,7 +1,7 @@
-const MongodbSyncProvider = require('./index')
+const MongodbSyncProvider = require('ceiling-mongodb')
 const MongoInMemory = require('mongo-in-memory')
-const CannotConnectError = require('./cannot-connect-error')
 const consoleMock = require('console-mock2')
+const expect = require('expect')
 
 describe('MongodbSyncProvider', () => {
 
@@ -33,7 +33,7 @@ describe('MongodbSyncProvider', () => {
           })
         }
       })
-    })
+    }).timeout(3000)
 
     afterEach(done => {
       this.mongoInMemory.stop(err => {
@@ -42,7 +42,7 @@ describe('MongodbSyncProvider', () => {
       })
     })
 
-    it('empty to-database', done => {
+    it('empty to-database', async () => {
       const live = {
         database: 'live',
         host: '127.0.0.1',
@@ -53,14 +53,13 @@ describe('MongodbSyncProvider', () => {
         host: '127.0.0.1',
         port: 8000
       }
-      this.live.collection('tasks').insertMany(this.liveTasks)
+      await this.live.collection('tasks').insertMany(this.liveTasks)
         .then(() => consoleMock(() => MongodbSyncProvider.sync(live, local)))
         .then(() => this.local.collection('tasks').find().toArray())
         .then(localTasks => expect(localTasks).toEqual(this.liveTasks))
-        .then(done)
     })
 
-    it('non-empty to-database', done => {
+    it('non-empty to-database', async () => {
       const live = {
         database: 'live',
         host: '127.0.0.1',
@@ -71,7 +70,7 @@ describe('MongodbSyncProvider', () => {
         host: '127.0.0.1',
         port: 8000
       }
-      this.live.collection('tasks').insertMany(this.liveTasks)
+      await this.live.collection('tasks').insertMany(this.liveTasks)
         .then(() => this.local.collection('foo').insertOne({ bar: 'baz' }))
         .then(() => consoleMock(() => MongodbSyncProvider.sync(live, local)))
         .then(() => Promise.all([
@@ -82,10 +81,9 @@ describe('MongodbSyncProvider', () => {
           expect(result[0]).toEqual(this.liveTasks)
           expect(result[1]).toEqual([])
         })
-        .then(done)
     })
 
-    it(`can't connect to from`, done => {
+    it(`can't connect to from`, async () => {
       const live = {
         database: 'live',
         host: '127.0.0.1',
@@ -97,15 +95,10 @@ describe('MongodbSyncProvider', () => {
         host: '127.0.0.1',
         port: 8000,
       }
-      consoleMock(MongodbSyncProvider.sync(live, local))
-        .then(() => { expect(false).toBeTruthy(); done() })
-        .catch(err => {
-          expect(err).toEqual(new CannotConnectError('mongodb://root:foo@127.0.0.1:8000/live?authSource=live'));
-          done();
-        })
+      await expect(consoleMock(MongodbSyncProvider.sync(live, local))).rejects.toThrow(new MongodbSyncProvider.CannotConnectError('mongodb://root:foo@127.0.0.1:8000/live?authSource=live'));
     })
 
-    it(`can't connect to to`, done => {
+    it(`can't connect to to`, async () => {
       const local = {
         database: 'loc',
         host: '127.0.0.1',
@@ -117,12 +110,7 @@ describe('MongodbSyncProvider', () => {
         host: '127.0.0.1',
         port: 8000,
       }
-      consoleMock(MongodbSyncProvider.sync(live, local))
-        .then(() => { expect(false).toBeTruthy(); done(); })
-        .catch(err => {
-          expect(err).toEqual(new CannotConnectError('mongodb://root:foo@127.0.0.1:8000/loc?authSource=loc'));
-          done();
-        })
+      await expect(consoleMock(MongodbSyncProvider.sync(live, local))).rejects.toThrow(new MongodbSyncProvider.CannotConnectError('mongodb://root:foo@127.0.0.1:8000/loc?authSource=loc'));
     })
   })
 

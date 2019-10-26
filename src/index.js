@@ -1,15 +1,16 @@
 const MongoClient = require('mongodb').MongoClient
 const CannotConnectError = require('./cannot-connect-error')
-const notnull = require('not-null')
 
 module.exports = {
+
+  CannotConnectError,
 
   sync(fromEndpoint, toEndpoint) {
 
     function _url(endpoint) {
-      var result = `mongodb://${notnull(endpoint.user, 'root')}:${notnull(endpoint.password, 'root')}@${notnull(endpoint.host, '127.0.0.1')}`
-      if (notnull(endpoint.port, 27017) != 27017) {
-        result += `:${notnull(endpoint.port, 27017)}`;
+      var result = `mongodb://${endpoint.user || 'root'}:${endpoint.password || 'root'}@${endpoint.host || '127.0.0.1'}`
+      if ((endpoint.port || 27017) != 27017) {
+        result += `:${endpoint.port || 27017}`;
       }
       result += `/${endpoint.database}?authSource=${endpoint.database}`
       return result
@@ -44,10 +45,12 @@ module.exports = {
 
   endpointToString(endpoint) {
     var result = `mongodb://${endpoint.host}`
-    if (notnull(endpoint.port, 27017) != 27017) {
-      result += `:${notnull(endpoint.port, 27017)}`
+    if ((endpoint.port || 27017) != 27017) {
+      result += `:${endpoint.port || 27017}`
     }
     result += `/${endpoint.database}`
     return result
-  }
+  },
+
+  CannotConnectError,
 }
