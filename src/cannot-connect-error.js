@@ -1,7 +1,6 @@
-class CannotConnectError extends Error {
+export default class extends Error {
 
   constructor(url) {
-    super(`Cannot connect to database ${url}.`);
+    super(`Cannot connect to database ${url}.`)
   }
 }
-module.exports = CannotConnectError;

@@ -1,14 +1,13 @@
-const MongodbSyncProvider = require('ceiling-mongodb')
-const MongoInMemory = require('mongo-in-memory')
-const consoleMock = require('console-mock2')
-const expect = require('expect')
+import MongodbSyncProvider from 'ceiling-mongodb'
+import MongoInMemory from 'mongo-in-memory'
+import consoleMock from 'console-mock2'
 
 describe('MongodbSyncProvider', () => {
 
   describe('sync', () => {
 
     beforeEach(done => {
-      this.mongoInMemory = new MongoInMemory(8000);
+      this.mongoInMemory = new MongoInMemory(8000)
       this.mongoInMemory.start(err => {
         if (err) {
           console.error(err)
@@ -22,12 +21,12 @@ describe('MongodbSyncProvider', () => {
               this.live = this.client.db('live')
 
               this.liveTasks = [
-                { title: 'task1', body: 'foo' },
+                { title: 'task1', body: 'foo' },
                 { title: 'task2', body: 'bar' },
               ]
               Promise.all([
-                this.local.addUser('root', 'root', { roles: [{ role: 'readWrite', db: 'loc' }] }),
-                this.live.addUser('root', 'root', { roles: [{ role: 'readWrite', db: 'live' }] })
+                this.local.addUser('root', 'root', { roles: [{ role: 'readWrite', db: 'loc' }] }),
+                this.live.addUser('root', 'root', { roles: [{ role: 'readWrite', db: 'live' }] }),
               ]).then(done)
             }
           })
@@ -46,12 +45,12 @@ describe('MongodbSyncProvider', () => {
       const live = {
         database: 'live',
         host: '127.0.0.1',
-        port: 8000
+        port: 8000,
       }
       const local = {
         database: 'loc',
         host: '127.0.0.1',
-        port: 8000
+        port: 8000,
       }
       await this.live.collection('tasks').insertMany(this.liveTasks)
         .then(() => consoleMock(() => MongodbSyncProvider.sync(live, local)))
@@ -63,19 +62,19 @@ describe('MongodbSyncProvider', () => {
       const live = {
         database: 'live',
         host: '127.0.0.1',
-        port: 8000
+        port: 8000,
       }
       const local = {
         database: 'loc',
         host: '127.0.0.1',
-        port: 8000
+        port: 8000,
       }
       await this.live.collection('tasks').insertMany(this.liveTasks)
         .then(() => this.local.collection('foo').insertOne({ bar: 'baz' }))
         .then(() => consoleMock(() => MongodbSyncProvider.sync(live, local)))
         .then(() => Promise.all([
           this.local.collection('tasks').find().toArray(),
-          this.local.collection('foo').find().toArray()
+          this.local.collection('foo').find().toArray(),
         ]))
         .then(result => {
           expect(result[0]).toEqual(this.liveTasks)
@@ -83,7 +82,7 @@ describe('MongodbSyncProvider', () => {
         })
     })
 
-    it(`can't connect to from`, async () => {
+    it('can\'t connect to from', async () => {
       const live = {
         database: 'live',
         host: '127.0.0.1',
@@ -95,10 +94,10 @@ describe('MongodbSyncProvider', () => {
         host: '127.0.0.1',
         port: 8000,
       }
-      await expect(consoleMock(MongodbSyncProvider.sync(live, local))).rejects.toThrow(new MongodbSyncProvider.CannotConnectError('mongodb://root:foo@127.0.0.1:8000/live?authSource=live'));
+      await expect(consoleMock(MongodbSyncProvider.sync(live, local))).rejects.toThrow(new MongodbSyncProvider.CannotConnectError('mongodb://root:foo@127.0.0.1:8000/live?authSource=live'))
     })
 
-    it(`can't connect to to`, async () => {
+    it('can\'t connect to to', async () => {
       const local = {
         database: 'loc',
         host: '127.0.0.1',
@@ -110,7 +109,7 @@ describe('MongodbSyncProvider', () => {
         host: '127.0.0.1',
         port: 8000,
       }
-      await expect(consoleMock(MongodbSyncProvider.sync(live, local))).rejects.toThrow(new MongodbSyncProvider.CannotConnectError('mongodb://root:foo@127.0.0.1:8000/loc?authSource=loc'));
+      await expect(consoleMock(MongodbSyncProvider.sync(live, local))).rejects.toThrow(new MongodbSyncProvider.CannotConnectError('mongodb://root:foo@127.0.0.1:8000/loc?authSource=loc'))
     })
   })
 
