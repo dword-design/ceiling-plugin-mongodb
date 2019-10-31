@@ -10,10 +10,6 @@
   "repository": "https://github.com/dword-design/ceiling-mongodb",
   "author": "Sebastian Landwehr <info@dword-design.de>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dword-design/ceiling-mongodb/issues"
-  },
-  "homepage": "https://github.com/dword-design/ceiling-mongodb#readme",
   "devDependencies": {
     "@dword-design/base-node": "^0.4.1",
     "console-mock2": "^0.2.2",
