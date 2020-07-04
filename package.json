@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@dword-design/base": "^6.20.2",
-    "mongo-in-memory": "0.0.5"
+    "mongodb-memory-server": "^6.6.1"
   },
   "publishConfig": {
     "access": "public"
