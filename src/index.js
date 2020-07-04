@@ -1,52 +1,62 @@
+import { map } from '@dword-design/functions'
 import mongodb from 'mongodb'
+
 import CannotConnectError from './cannot-connect-error'
 
-export { CannotConnectError }
-
-export const sync = (fromEndpoint, toEndpoint) => {
-
-  const _url = endpoint => {
-    let result = `mongodb://${endpoint.user || 'root'}:${endpoint.password || 'root'}@${endpoint.host || '127.0.0.1'}`
-    if ((endpoint.port || 27017) != 27017) {
-      result += `:${endpoint.port || 27017}`
-    }
-    result += `/${endpoint.database}?authSource=${endpoint.database}`
-    return result
-  }
-
-  const fromUrl = _url(fromEndpoint)
-  const toUrl = _url(toEndpoint)
-
-  console.log('Connecting to the databases ...')
-
-  return Promise.all([
-    mongodb.MongoClient.connect(fromUrl, { useNewUrlParser: true }).catch(() => { throw new CannotConnectError(fromUrl) }),
-    mongodb.MongoClient.connect(toUrl, { useNewUrlParser: true }).catch(() => { throw new CannotConnectError(toUrl) }),
-  ])
-    .then(clients => {
-      const fromDb = clients[0].db(fromEndpoint.database)
-      const toDb = clients[1].db(toEndpoint.database)
-      return toDb.dropDatabase()
-        .then(() => {
-          console.log(`Dropping database ${toUrl} ...`)
-          return fromDb.listCollections().toArray()
-        })
-        .then(collections => {
-          console.log(`Importing collections from ${fromUrl} ...`)
-          return Promise.all(
-            collections.map(collection => fromDb.collection(collection.name).find().toArray()
-              .then(objects => toDb.collection(collection.name).insertMany(objects))
-            )
-          )
-        })
-    })
-}
-
-export const endpointToString = endpoint => {
-  let result = `mongodb://${endpoint.host}`
-  if ((endpoint.port || 27017) != 27017) {
+const getUrl = endpoint => {
+  let result = `mongodb://${endpoint.user || 'root'}:${
+    endpoint.password || 'root'
+  }@${endpoint.host || '127.0.0.1'}`
+  if ((endpoint.port || 27017) !== 27017) {
     result += `:${endpoint.port || 27017}`
   }
-  result += `/${endpoint.database}`
+  result += `/${endpoint.database}?authSource=${endpoint.database}`
   return result
+}
+
+export default {
+  CannotConnectError,
+  endpointToString: endpoint => {
+    let result = `mongodb://${endpoint.host}`
+    if ((endpoint.port || 27017) !== 27017) {
+      result += `:${endpoint.port || 27017}`
+    }
+    result += `/${endpoint.database}`
+    return result
+  },
+  sync: async (fromEndpoint, toEndpoint, options = {}) => {
+    const fromUrl = fromEndpoint |> getUrl
+    const toUrl = toEndpoint |> getUrl
+    const log = message => {
+      if (options.log !== false) {
+        console.log(message)
+      }
+    }
+    log('Connecting to the databases ...')
+    const clients = await Promise.all([
+      mongodb.MongoClient.connect(fromUrl, { useNewUrlParser: true }).catch(
+        () => {
+          throw new CannotConnectError(fromUrl)
+        }
+      ),
+      mongodb.MongoClient.connect(toUrl, { useNewUrlParser: true }).catch(
+        () => {
+          throw new CannotConnectError(toUrl)
+        }
+      ),
+    ])
+    const fromDb = clients[0].db(fromEndpoint.database)
+    const toDb = clients[1].db(toEndpoint.database)
+    log(`Dropping database ${toUrl} ...`)
+    await toDb.dropDatabase()
+    const collections = await fromDb.listCollections().toArray()
+    log(`Importing collections from ${fromUrl} ...`)
+    await (collections
+      |> map(async collection => {
+        const objects =
+          fromDb.collection(collection.name).find().toArray() |> await
+        return toDb.collection(collection.name).insertMany(objects)
+      })
+      |> Promise.all)
+  },
 }
