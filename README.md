@@ -1,9 +1,9 @@
 <!-- TITLE/ -->
-# ceiling-mongodb
+# ceiling-plugin-mongodb
 <!-- /TITLE -->
 
 <!-- BADGES/ -->
-[![NPM version](https://img.shields.io/npm/v/ceiling-mongodb.svg)](https://npmjs.org/package/ceiling-mongodb)
+[![NPM version](https://img.shields.io/npm/v/ceiling-plugin-mongodb.svg)](https://npmjs.org/package/ceiling-plugin-mongodb)
 ![Linux macOS Windows compatible](https://img.shields.io/badge/os-linux%20%7C%C2%A0macos%20%7C%C2%A0windows-blue)
 [![Build status](https://img.shields.io/github/workflow/status/dword-design/ceiling-plugin-mongodb/build)](https://github.com/dword-design/ceiling-plugin-mongodb/actions)
 [![Coverage status](https://img.shields.io/coveralls/dword-design/ceiling-plugin-mongodb)](https://coveralls.io/github/dword-design/ceiling-plugin-mongodb)
@@ -37,10 +37,10 @@
 
 ```bash
 # NPM
-$ npm install ceiling-mongodb
+$ npm install ceiling-plugin-mongodb
 
 # Yarn
-$ yarn add ceiling-mongodb
+$ yarn add ceiling-plugin-mongodb
 ```
 <!-- /INSTALL -->
 
