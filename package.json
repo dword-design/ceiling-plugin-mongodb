@@ -1,6 +1,6 @@
 {
-  "name": "ceiling-mongodb",
-  "version": "0.1.2",
+  "name": "ceiling-plugin-mongodb",
+  "version": "1.0.0",
   "description": "",
   "repository": "dword-design/ceiling-plugin-mongodb",
   "license": "MIT",
@@ -10,6 +10,7 @@
     "dist"
   ],
   "scripts": {
+    "clean": "base clean",
     "commit": "base commit",
     "dev": "base dev",
     "lint": "base lint",
