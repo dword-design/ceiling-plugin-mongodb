@@ -1,3 +1,11 @@
+## [0.1.5](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v0.1.4...v0.1.5) (2021-03-22)
+
+
+### Bug Fixes
+
+* lock file maintenance ([#10](https://github.com/dword-design/ceiling-plugin-mongodb/issues/10)) ([e40ebd2](https://github.com/dword-design/ceiling-plugin-mongodb/commit/e40ebd2590643606e59d194d350c757da8f6b048))
+* lock file maintenance ([#9](https://github.com/dword-design/ceiling-plugin-mongodb/issues/9)) ([191d491](https://github.com/dword-design/ceiling-plugin-mongodb/commit/191d49180f0861d7a88f8115180ddc681b116143))
+
 ## [0.1.4](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v0.1.3...v0.1.4) (2021-02-17)
 
 
