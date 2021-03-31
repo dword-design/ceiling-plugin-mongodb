@@ -4,5 +4,6 @@ export default endpoint => {
     result += `:${endpoint.port || 27017}`
   }
   result += `/${endpoint.database}`
+
   return result
 }
