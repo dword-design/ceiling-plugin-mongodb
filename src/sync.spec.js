@@ -8,25 +8,35 @@ const liveTasks = [
   { body: 'foo', title: 'task1' },
   { body: 'bar', title: 'task2' },
 ]
+
 const runTest = config => {
   config = { init: noop, ...config }
+
   return async () => {
     const localMongo = new MongoMemoryServer()
+
     const liveMongo = new MongoMemoryServer()
+
     const localUrl = await localMongo.getUri()
+
     const liveUrl = await liveMongo.getUri()
+
     const local = config.local || {
       database: 'loc',
       port: await localMongo.getPort(),
     }
+
     const live = config.live || {
       database: 'live',
       port: await liveMongo.getPort(),
     }
+
     const localClient = await mongodb.MongoClient.connect(localUrl)
+
     const liveClient = await mongodb.MongoClient.connect(liveUrl)
     try {
       const localDb = localClient.db('loc')
+
       const liveDb = liveClient.db('live')
       await Promise.all([
         localDb.addUser('root', 'root', {
