@@ -50,7 +50,7 @@
 <!-- /BADGES -->
 
 <!-- DESCRIPTION/ -->
-
+A MongoDB Ceiling Sync Provider to sync databases between endpoints.
 <!-- /DESCRIPTION -->
 
 <!-- INSTALL/ -->
