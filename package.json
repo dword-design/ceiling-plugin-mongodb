@@ -27,6 +27,9 @@
     "@dword-design/base": "^8.0.0",
     "mongodb-memory-server": "^6.6.1"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "publishConfig": {
     "access": "public"
   }
