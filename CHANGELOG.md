@@ -1,3 +1,19 @@
+# [1.0.0](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v0.1.8...v1.0.0) (2021-05-03)
+
+
+### Bug Fixes
+
+* update dependency @dword-design/base to v8 ([#20](https://github.com/dword-design/ceiling-plugin-mongodb/issues/20)) ([bb03e0d](https://github.com/dword-design/ceiling-plugin-mongodb/commit/bb03e0d5f17734abd38275d3f8829b4dff434ffc))
+
+
+### BREAKING CHANGES
+
+* require Node.js >= 12
+
+Co-authored-by: Renovate Bot <bot@renovateapp.com>
+Co-authored-by: Sebastian Landwehr <info@dword-design.de>
+Co-authored-by: GitHub Actions <actions@github.com>
+
 ## [0.1.8](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v0.1.7...v0.1.8) (2021-04-27)
 
 
