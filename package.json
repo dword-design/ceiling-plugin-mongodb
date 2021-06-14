@@ -1,6 +1,6 @@
 {
   "name": "ceiling-plugin-mongodb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A MongoDB Ceiling Sync Provider to sync databases between endpoints.",
   "repository": "dword-design/ceiling-plugin-mongodb",
   "funding": "https://www.buymeacoffee.com/dword",
