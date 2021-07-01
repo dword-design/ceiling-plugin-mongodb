@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@dword-design/base": "^8.0.0",
-    "mongodb-memory-server": "^6.6.1"
+    "mongodb-memory-server": "^7.0.0"
   },
   "engines": {
     "node": ">=12"
