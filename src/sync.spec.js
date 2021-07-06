@@ -13,22 +13,22 @@ const runTest = config => {
   config = { init: noop, ...config }
 
   return async () => {
-    const localMongo = new MongoMemoryServer()
+    const localMongo = await MongoMemoryServer.create()
 
-    const liveMongo = new MongoMemoryServer()
+    const liveMongo = await MongoMemoryServer.create()
 
-    const localUrl = await localMongo.getUri()
+    const localUrl = localMongo.getUri()
 
-    const liveUrl = await liveMongo.getUri()
+    const liveUrl = liveMongo.getUri()
 
     const local = config.local || {
       database: 'loc',
-      port: await localMongo.getPort(),
+      port: localMongo.instanceInfo.port,
     }
 
     const live = config.live || {
       database: 'live',
-      port: await liveMongo.getPort(),
+      port: liveMongo.instanceInfo.port,
     }
 
     const localClient = await mongodb.MongoClient.connect(localUrl)
