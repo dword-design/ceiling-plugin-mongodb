@@ -57,12 +57,8 @@ const runTest = config => {
         await config.test(localDb)
       }
     } finally {
-      await Promise.all([
-        localClient.close(),
-        liveClient.close(),
-        localMongo.stop(),
-        liveMongo.stop(),
-      ])
+      await Promise.all([localClient.close(), liveClient.close()])
+      await Promise.all([localMongo.stop(), liveMongo.stop()])
     }
   }
 }
