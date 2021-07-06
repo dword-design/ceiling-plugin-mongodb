@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v1.0.3...v1.0.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* update dependency mongodb-memory-server to v7 ([75e1b33](https://github.com/dword-design/ceiling-plugin-mongodb/commit/75e1b33d9bb321b60768ccbc9234323375fe2be2))
+
 ## [1.0.3](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v1.0.2...v1.0.3) (2021-06-14)
 
 
