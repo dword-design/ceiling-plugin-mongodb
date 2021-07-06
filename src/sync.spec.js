@@ -59,6 +59,7 @@ const runTest = config => {
         await config.test(localDb)
       }
     } finally {
+      console.log('done. cleaning up ...')
       await Promise.all([
         localClient.close(),
         liveClient.close(),
