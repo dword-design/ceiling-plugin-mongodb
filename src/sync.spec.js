@@ -14,10 +14,8 @@ const runTest = config => {
 
   return async () => {
     const localMongo = await MongoMemoryServer.create()
-    console.log('created local mongo')
 
     const liveMongo = await MongoMemoryServer.create()
-    console.log('created live mongo')
 
     const localUrl = localMongo.getUri()
 
@@ -59,7 +57,6 @@ const runTest = config => {
         await config.test(localDb)
       }
     } finally {
-      console.log('done. cleaning up ...')
       await Promise.all([localClient.close(), liveClient.close()])
       await Promise.all([localMongo.stop(), liveMongo.stop()])
     }
