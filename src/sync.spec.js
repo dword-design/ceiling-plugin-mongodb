@@ -14,8 +14,10 @@ const runTest = config => {
 
   return async () => {
     const localMongo = await MongoMemoryServer.create()
+    console.log('created local mongo')
 
     const liveMongo = await MongoMemoryServer.create()
+    console.log('created local mongo')
 
     const localUrl = localMongo.getUri()
 
