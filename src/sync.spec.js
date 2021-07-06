@@ -60,12 +60,8 @@ const runTest = config => {
       }
     } finally {
       console.log('done. cleaning up ...')
-      await Promise.all([
-        localClient.close(),
-        liveClient.close(),
-        localMongo.stop(),
-        liveMongo.stop(),
-      ])
+      await Promise.all([localClient.close(), liveClient.close()])
+      await Promise.all([localMongo.stop(), liveMongo.stop()])
     }
   }
 }
