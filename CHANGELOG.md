@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v1.0.4...v1.0.5) (2021-07-06)
+
+
+### Bug Fixes
+
+* update config files ([e2d2f9e](https://github.com/dword-design/ceiling-plugin-mongodb/commit/e2d2f9e29662d0dcaf0701c4e86b16f864139b91))
+
 ## [1.0.4](https://github.com/dword-design/ceiling-plugin-mongodb/compare/v1.0.3...v1.0.4) (2021-07-06)
 
 
