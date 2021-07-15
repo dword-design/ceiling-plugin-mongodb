@@ -1,5 +1,5 @@
 import { mapValues, noop } from '@dword-design/functions'
-import mongodb from 'mongodb'
+import * as mongodb from 'mongodb'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
 import self from './sync'
@@ -30,34 +30,36 @@ const runTest = config => {
       database: 'live',
       port: liveMongo.instanceInfo.port,
     }
-
-    const localClient = await mongodb.MongoClient.connect(localUrl)
-
-    const liveClient = await mongodb.MongoClient.connect(liveUrl)
     try {
-      const localDb = localClient.db('loc')
+      const localClient = await mongodb.MongoClient.connect(localUrl)
 
-      const liveDb = liveClient.db('live')
-      await Promise.all([
-        localDb.addUser('root', 'root', {
-          roles: [{ db: 'loc', role: 'readWrite' }],
-        }),
-        liveDb.addUser('root', 'root', {
-          roles: [{ db: 'live', role: 'readWrite' }],
-        }),
-      ])
-      await liveDb.collection('tasks').insertMany(liveTasks)
-      await config.init(localDb)
-      if (config.error) {
-        await expect(self(live, local, { log: false })).rejects.toThrow(
-          config.error
-        )
-      } else {
-        await self(live, local, { log: false })
-        await config.test(localDb)
+      const liveClient = await mongodb.MongoClient.connect(liveUrl)
+      try {
+        const localDb = localClient.db('loc')
+
+        const liveDb = liveClient.db('live')
+        await Promise.all([
+          localDb.addUser('root', 'root', {
+            roles: [{ db: 'loc', role: 'readWrite' }],
+          }),
+          liveDb.addUser('root', 'root', {
+            roles: [{ db: 'live', role: 'readWrite' }],
+          }),
+        ])
+        await liveDb.collection('tasks').insertMany(liveTasks)
+        await config.init(localDb)
+        if (config.error) {
+          await expect(self(live, local, { log: false })).rejects.toThrow(
+            config.error
+          )
+        } else {
+          await self(live, local, { log: false })
+          await config.test(localDb)
+        }
+      } finally {
+        await Promise.all([localClient.close(), liveClient.close()])
       }
     } finally {
-      await Promise.all([localClient.close(), liveClient.close()])
       await Promise.all([localMongo.stop(), liveMongo.stop()])
     }
   }
@@ -65,11 +67,11 @@ const runTest = config => {
 
 export default {
   "can't connect to from": {
-    error: 'failed to connect to server',
+    error: 'connect ECONNREFUSED 127.0.0.1:27017',
     local: {},
   },
   "can't connect to to": {
-    error: 'failed to connect to server',
+    error: 'connect ECONNREFUSED 127.0.0.1:27017',
     live: {},
   },
   'empty to-database': {
