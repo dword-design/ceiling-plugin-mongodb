@@ -1,5 +1,5 @@
 import { map } from '@dword-design/functions'
-import mongodb from 'mongodb'
+import * as mongodb from 'mongodb'
 
 const getUrl = endpoint => {
   let result = `mongodb://${endpoint.user || 'root'}:${
@@ -28,29 +28,31 @@ export default async (fromEndpoint, toEndpoint, options = {}) => {
   const fromClient = await mongodb.MongoClient.connect(fromUrl, {
     useNewUrlParser: true,
   })
-
-  const toClient = await mongodb.MongoClient.connect(toUrl, {
-    useNewUrlParser: true,
-  })
   try {
-    const fromDb = fromClient.db(fromEndpoint.database)
+    const toClient = await mongodb.MongoClient.connect(toUrl, {
+      useNewUrlParser: true,
+    })
+    try {
+      const fromDb = fromClient.db(fromEndpoint.database)
 
-    const toDb = toClient.db(toEndpoint.database)
-    log(`Dropping database ${toUrl} ...`)
-    await toDb.dropDatabase()
+      const toDb = toClient.db(toEndpoint.database)
+      log(`Dropping database ${toUrl} ...`)
+      await toDb.dropDatabase()
 
-    const collections = await fromDb.listCollections().toArray()
-    log(`Importing collections from ${fromUrl} ...`)
-    await (collections
-      |> map(async collection => {
-        const objects =
-          fromDb.collection(collection.name).find().toArray() |> await
+      const collections = await fromDb.listCollections().toArray()
+      log(`Importing collections from ${fromUrl} ...`)
+      await (collections
+        |> map(async collection => {
+          const objects =
+            fromDb.collection(collection.name).find().toArray() |> await
 
-        return toDb.collection(collection.name).insertMany(objects)
-      })
-      |> Promise.all)
+          return toDb.collection(collection.name).insertMany(objects)
+        })
+        |> Promise.all)
+    } finally {
+      await toClient.close()
+    }
   } finally {
     await fromClient.close()
-    await toClient.close()
   }
 }
