@@ -67,11 +67,17 @@ const runTest = config => {
 
 export default {
   "can't connect to from": {
-    error: 'connect ECONNREFUSED 127.0.0.1:27017',
+    error:
+      process.platform === 'win32'
+        ? 'Authentication failed.'
+        : 'connect ECONNREFUSED 127.0.0.1:27017',
     local: {},
   },
   "can't connect to to": {
-    error: 'connect ECONNREFUSED 127.0.0.1:27017',
+    error:
+      process.platform === 'win32'
+        ? 'Authentication failed.'
+        : 'connect ECONNREFUSED 127.0.0.1:27017',
     live: {},
   },
   'empty to-database': {
