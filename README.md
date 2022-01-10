@@ -3,7 +3,7 @@
 <!-- /TITLE -->
 
 <!-- BADGES/ -->
-<p>
+  <p>
     <a href="https://npmjs.org/package/ceiling-plugin-mongodb">
       <img
         src="https://img.shields.io/npm/v/ceiling-plugin-mongodb.svg"
